@@ -10,13 +10,15 @@ export default async function HomePageLayout({ children }) {
 	if (!session) {
 		redirect("/login");
 	}
-
 	return (
 		<>
 			<Header />
 			<div className="flex h-full">
 				<Sidebar />
-				<div className="h-full w-full p-2 md:px-5">{children}</div>
+				<div className="h-full w-full p-2 md:px-5">
+					<h1>{session.user.username}</h1>
+					{children}
+				</div>
 			</div>
 		</>
 	);

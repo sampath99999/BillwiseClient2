@@ -1,0 +1,30 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    username   String   @unique
+    password   String
+    name       String
+    network    Network  @relation(fields: [network_id], references: [id])
+    network_id Int
+    status     Boolean
+}
+
+model Network {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    name       String
+    address    String?
+    status     Boolean  @default(false)
+    users      User[]
+}

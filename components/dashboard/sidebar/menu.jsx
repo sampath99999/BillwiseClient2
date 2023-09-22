@@ -34,9 +34,8 @@ export default function Menu() {
 		<>
 			<ul className="mt-3 md:mt-0">
 				{menuLinks.map((link, index) => (
-					<li className="">
+					<li className="" key={index}>
 						<Link
-							key={index}
 							href={link.link}
 							className={
 								linkStyle +

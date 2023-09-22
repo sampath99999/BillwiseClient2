@@ -1,5 +1,8 @@
+// import prisma from "@/lib/utils";
+import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { compareSync } from "bcrypt";
 
 export const AuthOptions = {
 	session: {
@@ -10,23 +13,19 @@ export const AuthOptions = {
 			name: "Username & Password",
 			credentials: {},
 			async authorize(credentials, req) {
-				credentials = {
-					username: credentials.username,
-					password: credentials.password,
-				};
-				const res = await fetch(
-					process.env.SERVER_URL + "/users/login",
-					{
-						method: "POST",
-						body: JSON.stringify(credentials),
-						headers: { "Content-Type": "application/json" },
-					}
-				);
-				const user = await res.json();
-				if (res.ok && user) {
+				let prisma = new PrismaClient();
+				let user = await prisma.user.findUnique({
+					where: {
+						username: credentials.username,
+					},
+				});
+				if (!user) {
+					throw new Error("Invalid username or password");
+				}
+				if (compareSync(credentials.password, user.password)) {
 					return user;
 				}
-				throw new Error(user.message);
+				throw new Error("Invalid username or password");
 			},
 		}),
 	],
