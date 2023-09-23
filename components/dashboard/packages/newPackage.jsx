@@ -23,7 +23,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,27 +35,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { useSession } from "next-auth/react";
-
-const formSchema = z.object({
-	name: z
-		.string({
-			required_error: "Package Name is Required",
-		})
-		.min(3, "Package Name should be at least 3 character's long")
-		.max(30, "Package Name should be at most 30 character's long"),
-	price: z
-		.string({ required_error: "Invalid Amount" })
-		.min(1, "Invalid Amount")
-		.max(1000, "Max Amount is 1000₹"),
-	type: z.enum(["CHANNEL", "PACKAGE"]),
-	status: z.boolean(),
-});
+import { newPackageFormSchema } from "@/utils/forms";
 
 export function NewPackageModal({ setPackages, packages }) {
 	const { toast } = useToast();
 	const [createLoading, setCreateLoading] = useState(false);
 	const form = useForm({
-		resolver: zodResolver(formSchema),
+		resolver: zodResolver(newPackageFormSchema),
 		defaultValues: {
 			name: "",
 			price: "",
@@ -64,7 +49,6 @@ export function NewPackageModal({ setPackages, packages }) {
 			status: true,
 		},
 	});
-	const session = useSession();
 
 	async function handleCreate(values) {
 		setCreateLoading(true);
