@@ -22,6 +22,19 @@ export const AuthOptions = {
 				if (!user) {
 					throw new Error("Invalid username or password");
 				}
+				if (!user.status) {
+					throw new Error("Your account is not activated");
+				}
+				let network = await prisma.network.findUnique({
+					where: {
+						id: user.network_id,
+					},
+				});
+				if (network) {
+					if (!network.status) {
+						throw new Error("Network is not active");
+					}
+				}
 				if (compareSync(credentials.password, user.password)) {
 					return user;
 				}
@@ -31,6 +44,19 @@ export const AuthOptions = {
 	],
 	pages: {
 		signIn: "/login",
+	},
+	callbacks: {
+		jwt: ({ token, account, user }) => {
+			if (account) {
+				token.accessToken = account.access_token;
+				token.id = user?.id;
+			}
+			return token;
+		},
+		session: ({ session, token }) => {
+			session.user.id = token.id;
+			return session;
+		},
 	},
 };
 const handler = NextAuth(AuthOptions);

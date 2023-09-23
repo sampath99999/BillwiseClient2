@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const FormSchema = z.object({
 	username: z
@@ -45,9 +45,28 @@ function Login() {
 			password: "",
 		},
 	});
-
-	const router = useRouter();
 	const [loading, setLoading] = useState(false);
+	const params = useSearchParams();
+	const router = useRouter();
+
+	const onInit = () => {
+		let errorMessages = {
+			token_expired: "Please Login Again!",
+			user_inactive: "User is inactive!",
+			network_inactive: "Network is inactive!",
+		};
+		const error = params.get("error");
+		if (error) {
+			form.setError("username", {
+				type: "manual",
+				message: errorMessages[error],
+			});
+		}
+		window.history.replaceState(null, "", "/login");
+	};
+	useEffect(() => {
+		onInit();
+	}, []);
 
 	async function loginUser(values) {
 		setLoading(true);

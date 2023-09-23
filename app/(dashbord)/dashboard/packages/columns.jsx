@@ -49,7 +49,7 @@ export const CustomerColumns = [
 		header: "Status",
 		filterOperator: "eq",
 		cell: ({ row }) => {
-			if (row.original.status === "Active") {
+			if (row.original.status) {
 				return (
 					<div
 						className={"p-2 text-green-500 flex gap-2 items-center"}
@@ -72,7 +72,7 @@ export const CustomerColumns = [
 			}
 		},
 		filterFn: (row, columnId, value) => {
-			return row.original.status === value;
+			return row.original.status === (value == "Active" ? true : false);
 		},
 	},
 	{

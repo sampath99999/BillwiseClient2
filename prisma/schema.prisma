@@ -20,11 +20,33 @@ model User {
 }
 
 model Network {
-    id         Int      @id @default(autoincrement())
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    id         Int       @id @default(autoincrement())
+    created_at DateTime  @default(now())
+    updated_at DateTime  @updatedAt
     name       String
     address    String?
-    status     Boolean  @default(false)
+    status     Boolean   @default(false)
     users      User[]
+    packages   Package[]
+}
+
+model Package {
+    id         Int         @id @default(autoincrement())
+    created_at DateTime    @default(now())
+    updated_at DateTime    @updatedAt
+    name       String
+    price      Int
+    type       PackageType @default(CHANNEL)
+    status     Boolean     @default(true)
+    network    Network     @relation(fields: [network_id], references: [id])
+    network_id Int
+}
+
+enum PackageType {
+    CHANNEL
+    PACKAGE
+}
+
+model log {
+    id Int @id @default(autoincrement())
 }

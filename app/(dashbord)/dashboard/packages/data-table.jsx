@@ -63,11 +63,11 @@ export function DataTable({ columns, data }) {
 																header.column
 																	.columnDef
 																	.header,
-																header.getContext(),
+																header.getContext()
 														  )}
 												</TableHead>
 											);
-										},
+										}
 									)}
 								</TableRow>
 							))}
@@ -84,11 +84,13 @@ export function DataTable({ columns, data }) {
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}
-											className={"whitespace-nowrap"}
+											className={
+												"whitespace-nowrap lowercase first-letter:uppercase"
+											}
 										>
 											{flexRender(
 												cell.column.columnDef.cell,
-												cell.getContext(),
+												cell.getContext()
 											)}
 										</TableCell>
 									))}

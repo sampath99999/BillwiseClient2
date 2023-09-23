@@ -1,46 +1,17 @@
 import Breadcrumb from "@/components/dashboard/breadcrumb";
 import { DataTable } from "@/app/(dashbord)/dashboard/packages/data-table";
 import { CustomerColumns } from "@/app/(dashbord)/dashboard/packages/columns";
+import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/utils";
 
-export default function Packages() {
+export default async function Packages() {
 	const breadcrumbLinks = [
 		{
 			name: "Dashboard",
 			link: "/dashboard",
 		},
 	];
-	const data = [
-		{
-			name: "Gemini TV",
-			price: "12.00",
-			status: "Active",
-			type: "Channel",
-		},
-		{
-			name: "Zee Telugu",
-			price: "8.00",
-			status: "Inactive",
-			type: "Channel",
-		},
-		{
-			name: "SITI Telugu",
-			price: "220.00",
-			status: "Active",
-			type: "Package",
-		},
-		{
-			name: "SITI Basic",
-			price: "120.00",
-			status: "Active",
-			type: "Package",
-		},
-		{
-			name: "SITI Demo",
-			price: "0.00",
-			status: "Inactive",
-			type: "Package",
-		},
-	];
+	const data = await prisma.package.findMany();
 	return (
 		<>
 			<Breadcrumb links={breadcrumbLinks} current="Packages" />
