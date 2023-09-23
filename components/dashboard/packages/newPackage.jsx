@@ -44,11 +44,11 @@ const formSchema = z.object({
 		})
 		.min(3, "Package Name should be at least 3 character's long")
 		.max(30, "Package Name should be at most 30 character's long"),
-	pricePerMonth: z
+	price: z
 		.string({ required_error: "Invalid Amount" })
 		.min(1, "Invalid Amount")
 		.max(1000, "Max Amount is 1000₹"),
-	type: z.enum(["Channel", "Package"]),
+	type: z.enum(["CHANNEL", "PACKAGE"]),
 	status: z.boolean(),
 });
 
@@ -59,7 +59,7 @@ export function NewPackageModal() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
-			pricePerMonth: "",
+			price: "",
 			type: "Channel",
 			status: true,
 		},
@@ -68,25 +68,26 @@ export function NewPackageModal() {
 
 	async function handleCreate(values) {
 		console.log(session);
-		return;
 		setCreateLoading(true);
-		const res = await fetch(
-			process.env.NEXT_PUBLIC_SERVER_URL + "/packages/",
-			{
-				method: "POST",
-				body: JSON.stringify(values),
-				headers: { "Content-Type": "application/json" },
-			},
-		);
-		const resData = await res.json();
+		const res = await fetch("/api/packages/", {
+			method: "POST",
+			body: JSON.stringify(values),
+			headers: { "Content-Type": "application/json" },
+		});
 		setCreateLoading(false);
+		let resData;
+		if (res.status != 404) resData = await res.json();
+		console.log(resData);
 		if (res.ok && resData) {
+			setCreateLoading(false);
 			toast({
 				description: "Package Created Successfully!",
 			});
+			return;
 		}
+		setCreateLoading(false);
 		toast({
-			description: resData.message,
+			description: resData?.message || "Something Went Wrong!",
 		});
 	}
 
@@ -128,7 +129,7 @@ export function NewPackageModal() {
 						/>
 						<FormField
 							control={form.control}
-							name="pricePerMonth"
+							name="price"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Price Per Month</FormLabel>
@@ -160,10 +161,10 @@ export function NewPackageModal() {
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value="Channel">
+												<SelectItem value="CHANNEL">
 													Channel
 												</SelectItem>
-												<SelectItem value="Package">
+												<SelectItem value="PACKAGE">
 													Package
 												</SelectItem>
 											</SelectContent>

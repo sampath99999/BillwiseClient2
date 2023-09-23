@@ -46,6 +46,7 @@ export const reducer = (state, action) => {
 
     case "UPDATE_TOAST":
       return {
+		
         ...state,
         toasts: state.toasts.map((t) =>
           t.id === action.toast.id ? { ...t, ...action.toast } : t),

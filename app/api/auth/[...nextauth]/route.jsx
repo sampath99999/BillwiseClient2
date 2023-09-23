@@ -50,11 +50,13 @@ export const AuthOptions = {
 			if (account) {
 				token.accessToken = account.access_token;
 				token.id = user?.id;
+				token.network_id = user?.network_id;
 			}
 			return token;
 		},
 		session: ({ session, token }) => {
 			session.user.id = token.id;
+			session.user.network_id = token.network_id;
 			return session;
 		},
 	},

@@ -18,6 +18,7 @@ export default function PackageAction() {
 				<SelectContent>
 					<SelectItem value={"inactive"}>InActive</SelectItem>
 					<SelectItem value={"active"}>Active</SelectItem>
+					<SelectItem value={"delete"}>Delete</SelectItem>
 				</SelectContent>
 			</Select>
 			<Button size={"sm"}>
