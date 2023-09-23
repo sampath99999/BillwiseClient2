@@ -5,7 +5,12 @@ import PackageAction from "@/components/dashboard/packages/action";
 import PackageFilterPopover from "@/components/dashboard/packages/filterPopover";
 import { NewPackageModal } from "@/components/dashboard/packages/newPackage";
 
-export default function PackageFilter({ table, filters }) {
+export default function PackageFilter({
+	table,
+	filters,
+	packages,
+	setPackages,
+}) {
 	function addFilter(name, value) {
 		table.getColumn(name)?.setFilterValue(value);
 	}
@@ -50,7 +55,10 @@ export default function PackageFilter({ table, filters }) {
 						↵
 					</label>
 				</div>
-				<NewPackageModal />
+				<NewPackageModal
+					setPackages={setPackages}
+					packages={packages}
+				/>
 			</div>
 		</div>
 	);

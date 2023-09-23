@@ -40,6 +40,7 @@ model Package {
     status     Boolean     @default(true)
     network    Network     @relation(fields: [network_id], references: [id])
     network_id Int
+	@@unique([network_id, name])
 }
 
 enum PackageType {

@@ -16,15 +16,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomerFilter from "@/components/dashboard/customers/filter";
 import PackageFilter from "@/components/dashboard/packages/filter";
 
 export function DataTable({ columns, data }) {
 	const [sorting, setSorting] = useState([]);
 	const [columnFilters, setColumnFilters] = useState([]);
+	const [packages, setPackages] = useState([...data]);
+
 	const table = useReactTable({
-		data,
+		data: packages,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		onSortingChange: setSorting,
@@ -39,7 +41,12 @@ export function DataTable({ columns, data }) {
 
 	return (
 		<>
-			<PackageFilter filters={columnFilters} table={table} />
+			<PackageFilter
+				filters={columnFilters}
+				table={table}
+				setPackages={setPackages}
+				packages={packages}
+			/>
 
 			<div className="rounded-md border mt-3">
 				<Table>
@@ -73,8 +80,8 @@ export function DataTable({ columns, data }) {
 							))}
 					</TableHeader>
 					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
+						{table?.getRowModel().rows?.length ? (
+							table?.getRowModel().rows.map((row) => (
 								<TableRow
 									key={row.id}
 									data-state={

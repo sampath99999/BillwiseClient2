@@ -52,7 +52,7 @@ const formSchema = z.object({
 	status: z.boolean(),
 });
 
-export function NewPackageModal() {
+export function NewPackageModal({ setPackages, packages }) {
 	const { toast } = useToast();
 	const [createLoading, setCreateLoading] = useState(false);
 	const form = useForm({
@@ -60,14 +60,13 @@ export function NewPackageModal() {
 		defaultValues: {
 			name: "",
 			price: "",
-			type: "Channel",
+			type: "CHANNEL",
 			status: true,
 		},
 	});
 	const session = useSession();
 
 	async function handleCreate(values) {
-		console.log(session);
 		setCreateLoading(true);
 		const res = await fetch("/api/packages/", {
 			method: "POST",
@@ -77,12 +76,13 @@ export function NewPackageModal() {
 		setCreateLoading(false);
 		let resData;
 		if (res.status != 404) resData = await res.json();
-		console.log(resData);
 		if (res.ok && resData) {
 			setCreateLoading(false);
 			toast({
 				description: "Package Created Successfully!",
 			});
+			form.reset();
+			setPackages([...packages, resData.data]);
 			return;
 		}
 		setCreateLoading(false);
