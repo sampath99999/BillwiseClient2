@@ -19,11 +19,13 @@ import {
 import { useEffect, useState } from "react";
 import CustomerFilter from "@/components/dashboard/customers/filter";
 import PackageFilter from "@/components/dashboard/packages/filter";
+import { CustomerColumns } from "./columns";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ data }) {
 	const [sorting, setSorting] = useState([]);
 	const [columnFilters, setColumnFilters] = useState([]);
 	const [packages, setPackages] = useState([...data]);
+	const columns = CustomerColumns(packages, setPackages);
 
 	const table = useReactTable({
 		data: packages,
@@ -38,6 +40,8 @@ export function DataTable({ columns, data }) {
 			columnFilters,
 		},
 	});
+
+	const deletePackage = async function (index) {};
 
 	return (
 		<>

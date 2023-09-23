@@ -57,11 +57,9 @@ export function NewPackageModal({ setPackages, packages }) {
 			body: JSON.stringify(values),
 			headers: { "Content-Type": "application/json" },
 		});
+		let resData = await res.json();
 		setCreateLoading(false);
-		let resData;
-		if (res.status != 404) resData = await res.json();
 		if (res.ok && resData) {
-			setCreateLoading(false);
 			toast({
 				description: "Package Created Successfully!",
 			});
@@ -69,7 +67,6 @@ export function NewPackageModal({ setPackages, packages }) {
 			setPackages([...packages, resData.data]);
 			return;
 		}
-		setCreateLoading(false);
 		toast({
 			description: resData?.message || "Something Went Wrong!",
 		});

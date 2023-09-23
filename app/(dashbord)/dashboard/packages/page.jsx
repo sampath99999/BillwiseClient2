@@ -16,7 +16,7 @@ export default async function Packages() {
 		<>
 			<Breadcrumb links={breadcrumbLinks} current="Packages" />
 			<h3 className="mt-3 font-bold text-lg mb-3">Packages</h3>
-			<DataTable columns={CustomerColumns} data={data} />
+			<DataTable data={data} />
 		</>
 	);
 }

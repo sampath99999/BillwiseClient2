@@ -7,7 +7,6 @@ import prisma from "@/lib/utils";
 export async function POST(req, res) {
 	let { name, type, price, status } = await req.json();
 	// TODO validations pending
-	// TODO save and send positive response
 	try {
 		let session = await getServerSession(AuthOptions);
 
@@ -25,6 +24,74 @@ export async function POST(req, res) {
 				success: true,
 				data: packageDoc,
 			});
+		} else {
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Something went wrong",
+				},
+				{ status: 500 }
+			);
+		}
+	} catch (e) {
+		console.log(e);
+		// TODO error handling
+		return NextResponse.json(
+			{
+				success: false,
+				message: "Something went wrong",
+			},
+			{ status: 500 }
+		);
+	}
+}
+
+export async function DELETE(req, res) {
+	let { id } = await req.json();
+	try {
+		let deletePackage = await prisma.package.delete({
+			where: {
+				id: id,
+			},
+		});
+		if (deletePackage) {
+			return NextResponse.json({
+				success: true,
+			});
+		} else {
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Something went wrong",
+				},
+				{ status: 500 }
+			);
+		}
+	} catch (e) {
+		console.log(e);
+		// TODO error handling
+		return NextResponse.json(
+			{
+				success: false,
+				message: "Something went wrong",
+			},
+			{ status: 500 }
+		);
+	}
+}
+
+export async function PATCH(req) {
+	let { id, data } = await req.json();
+	try {
+		if (data.price) data.price = parseInt(data.price);
+		let updatePackage = await prisma.package.update({
+			where: {
+				id: id,
+			},
+			data,
+		});
+		if (updatePackage) {
+			return NextResponse.json(updatePackage);
 		} else {
 			return NextResponse.json(
 				{
