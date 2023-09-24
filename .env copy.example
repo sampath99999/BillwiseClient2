@@ -1,2 +1,0 @@
-NEXTAUTH_SECRET=sssU9989
-DATABASE_URL="mysql://root:root@localhost:3306/billwise"
