@@ -75,7 +75,7 @@ export default function PackageRowAction({ packages, setPackages, index }) {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				id: packages[index].id,
+				ids: [packages[index].id],
 			}),
 		});
 

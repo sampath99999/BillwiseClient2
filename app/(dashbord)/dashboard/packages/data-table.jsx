@@ -20,12 +20,14 @@ import { useEffect, useState } from "react";
 import CustomerFilter from "@/components/dashboard/customers/filter";
 import PackageFilter from "@/components/dashboard/packages/filter";
 import { CustomerColumns } from "./columns";
+import { useToast } from "@/components/ui/use-toast";
 
 export function DataTable({ data }) {
 	const [sorting, setSorting] = useState([]);
 	const [columnFilters, setColumnFilters] = useState([]);
 	const [packages, setPackages] = useState([...data]);
 	const columns = CustomerColumns(packages, setPackages);
+	let { toast } = useToast();
 
 	const table = useReactTable({
 		data: packages,
@@ -41,7 +43,94 @@ export function DataTable({ data }) {
 		},
 	});
 
-	const deletePackage = async function (index) {};
+	const deletePackages = async function () {
+		let packagesSelected = table.getSelectedRowModel().rows;
+		let packageIds = [];
+		let tempPackages = [...packages];
+
+		if (packagesSelected.length == 0) {
+			toast({
+				title: "No packages selected",
+				description: "Please select a package to delete!",
+				variant: "destructive",
+			});
+			return;
+		}
+		for (let pkg in packagesSelected) {
+			packageIds.push(packages[pkg].id);
+		}
+		setPackages([...tempPackages]);
+		let response = await fetch("/api/packages", {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				ids: packageIds,
+			}),
+		});
+
+		let responseData = await response.json();
+		if (response.ok && responseData) {
+			toast({
+				description: "Package Deleted Successfully!",
+			});
+			tempPackages = [...packages];
+			for (let pkg in packagesSelected) {
+				tempPackages.splice(pkg, 1);
+			}
+			setPackages([...tempPackages]);
+			return;
+		}
+		toast({
+			description: responseData.message || "Something went wrong",
+		});
+	};
+
+	const changePackageStatusBulk = async function (status) {
+		let packagesSelected = table.getSelectedRowModel().rows;
+		let packageIds = [];
+		let tempPackages = [...packages];
+
+		if (packagesSelected.length == 0) {
+			toast({
+				title: "No packages selected",
+				description: "Please select a package to update!",
+				variant: "destructive",
+			});
+			return;
+		}
+		for (let pkg in packagesSelected) {
+			packageIds.push(packages[pkg].id);
+		}
+		setPackages([...tempPackages]);
+		let response = await fetch("/api/packages", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				ids: packageIds,
+				status,
+			}),
+		});
+
+		let responseData = await response.json();
+		if (response.ok && responseData) {
+			toast({
+				description: "Package Updated Successfully!",
+			});
+			tempPackages = [...packages];
+			for (let pkg in packagesSelected) {
+				tempPackages[pkg].status = status;
+			}
+			setPackages([...tempPackages]);
+			return;
+		}
+		toast({
+			description: responseData.message || "Something went wrong",
+		});
+	};
 
 	return (
 		<>
@@ -50,6 +139,8 @@ export function DataTable({ data }) {
 				table={table}
 				setPackages={setPackages}
 				packages={packages}
+				deletePackages={deletePackages}
+				changePackageStatusBulk={changePackageStatusBulk}
 			/>
 
 			<div className="rounded-md border mt-3">

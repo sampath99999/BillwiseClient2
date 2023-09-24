@@ -47,11 +47,13 @@ export async function POST(req, res) {
 }
 
 export async function DELETE(req, res) {
-	let { id } = await req.json();
+	let { ids } = await req.json();
 	try {
-		let deletePackage = await prisma.package.delete({
+		let deletePackage = await prisma.package.deleteMany({
 			where: {
-				id: id,
+				id: {
+					in: ids,
+				},
 			},
 		});
 		if (deletePackage) {
@@ -92,6 +94,43 @@ export async function PATCH(req) {
 		});
 		if (updatePackage) {
 			return NextResponse.json(updatePackage);
+		} else {
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Something went wrong",
+				},
+				{ status: 500 }
+			);
+		}
+	} catch (e) {
+		console.log(e);
+		// TODO error handling
+		return NextResponse.json(
+			{
+				success: false,
+				message: "Something went wrong",
+			},
+			{ status: 500 }
+		);
+	}
+}
+
+export async function PUT(req) {
+	let { ids, status } = await req.json();
+	try {
+		let updatePackages = await prisma.package.updateMany({
+			where: {
+				id: {
+					in: ids,
+				},
+			},
+			data: {
+				status,
+			},
+		});
+		if (updatePackages) {
+			return NextResponse.json(updatePackages);
 		} else {
 			return NextResponse.json(
 				{

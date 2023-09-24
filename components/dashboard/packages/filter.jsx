@@ -10,6 +10,8 @@ export default function PackageFilter({
 	filters,
 	packages,
 	setPackages,
+	deletePackages,
+	changePackageStatusBulk,
 }) {
 	function addFilter(name, value) {
 		table.getColumn(name)?.setFilterValue(value);
@@ -31,7 +33,10 @@ export default function PackageFilter({
 			}
 		>
 			<div className={"left flex items-center gap-3"}>
-				<PackageAction />
+				<PackageAction
+					deletePackages={deletePackages}
+					changePackageStatusBulk={changePackageStatusBulk}
+				/>
 				<PackageFilterPopover
 					filters={filters}
 					addFilter={addFilter}
