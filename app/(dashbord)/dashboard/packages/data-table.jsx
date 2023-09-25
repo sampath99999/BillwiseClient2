@@ -16,8 +16,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
-import CustomerFilter from "@/components/dashboard/customers/filter";
+import { useState } from "react";
 import PackageFilter from "@/components/dashboard/packages/filter";
 import { CustomerColumns } from "./columns";
 import { useToast } from "@/components/ui/use-toast";
@@ -186,9 +185,7 @@ export function DataTable({ data }) {
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}
-											className={
-												"whitespace-nowrap lowercase first-letter:uppercase"
-											}
+											className={"whitespace-nowrap"}
 										>
 											{flexRender(
 												cell.column.columnDef.cell,

@@ -51,6 +51,17 @@ export const CustomerColumns = (packages, setPackages) => {
 		{
 			accessorKey: "type",
 			header: "Type",
+			cell: ({ row }) => {
+				return (
+					<span>
+						{[...row.original.type][0].toUpperCase() +
+							[...row.original.type]
+								.slice(1)
+								.join("")
+								.toLowerCase()}
+					</span>
+				);
+			},
 		},
 		{
 			accessorKey: "status",

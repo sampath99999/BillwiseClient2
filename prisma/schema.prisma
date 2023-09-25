@@ -35,12 +35,13 @@ model Package {
     created_at DateTime    @default(now())
     updated_at DateTime    @updatedAt
     name       String
-    price      Int
+    price      Float
     type       PackageType @default(CHANNEL)
     status     Boolean     @default(true)
     network    Network     @relation(fields: [network_id], references: [id])
     network_id Int
-	@@unique([network_id, name])
+
+    @@unique([network_id, name])
 }
 
 enum PackageType {
