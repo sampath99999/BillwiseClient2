@@ -3,6 +3,7 @@ import { DashboardIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { GiVillage } from "react-icons/gi";
 import { PiUsersThree } from "react-icons/pi";
 import { RiWechatChannelsFill } from "react-icons/ri";
 
@@ -27,6 +28,11 @@ export default function Menu() {
 				name: "Packages",
 				link: "/dashboard/packages",
 				icon: <RiWechatChannelsFill />,
+			},
+			{
+				name: "Villages & Streets",
+				link: "/dashboard/villages",
+				icon: <GiVillage />,
 			},
 		]);
 	}, []);

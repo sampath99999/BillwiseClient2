@@ -28,6 +28,7 @@ model Network {
     status     Boolean   @default(false)
     users      User[]
     packages   Package[]
+    Village    Village[]
 }
 
 model Package {
@@ -42,6 +43,16 @@ model Package {
     network_id Int
 
     @@unique([network_id, name])
+}
+
+model Village {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    name       String
+    shortcode  String
+    network    Network  @relation(fields: [network_id], references: [id])
+    network_id Int
 }
 
 enum PackageType {
