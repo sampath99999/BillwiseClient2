@@ -59,8 +59,8 @@ export const VillageColumns = (villages, setVillages) => {
 			cell: function ({ row }) {
 				return (
 					<VillageRowAction
-						packages={villages}
-						setPackages={setVillages}
+						villages={villages}
+						setVillages={setVillages}
 						index={row.index}
 					/>
 				);

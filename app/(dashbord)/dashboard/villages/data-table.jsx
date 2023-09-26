@@ -18,6 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import VillageFilters from "@/components/dashboard/villages/filter";
 
 export function VillageDataTable({ data }) {
 	const [villages, SetVillages] = useState([...data]);
@@ -42,6 +43,8 @@ export function VillageDataTable({ data }) {
 
 	return (
 		<>
+			<VillageFilters villages={villages} setVillages={SetVillages} />
+
 			<div className="rounded-md border mt-3">
 				<Table>
 					<TableHeader>

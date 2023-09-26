@@ -2,8 +2,9 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { NewVillageModal } from "./newVillage";
 
-export default function VillageFilters() {
+export default function VillageFilters({ villages, setVillages }) {
 	return (
 		<>
 			<div
@@ -29,10 +30,10 @@ export default function VillageFilters() {
 					</div>
 				</div>
 				<div className={"right flex items-center gap-3"}>
-					<Button variant={"secondary"} size={"sm"}>
-						<PlusIcon />
-						<span className="hidden md:inline">New Villages</span>
-					</Button>
+					<NewVillageModal
+						villages={villages}
+						setVillages={setVillages}
+					/>
 				</div>
 			</div>
 		</>

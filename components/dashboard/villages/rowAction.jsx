@@ -60,16 +60,44 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
-export default function VillageRowAction({ packages, setPackages, index }) {
+export default function VillageRowAction({ villages, setVillages, index }) {
 	let { toast } = useToast();
 	let [editLoading, setEditLoading] = useState(false);
 	let [editDialogOpen, setEditDialogOpen] = useState(false);
 
-	const deletePackage = async function () {};
+	const deleteVillage = async function () {
+		let tempVillages = villages;
+		tempVillages[index].loading = true;
+		setVillages([...tempVillages]);
+		let response = await fetch("/api/villages", {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				ids: [villages[index].id],
+			}),
+		});
+
+		let responseData = await response.json();
+		if (response.ok && responseData) {
+			tempVillages.splice(index, 1);
+			setVillages([...tempVillages]);
+			toast({
+				description: "Village Deleted Successfully!",
+			});
+			return;
+		}
+		tempVillages[0].loading = false;
+		setVillages([...tempVillages]);
+		toast({
+			description: responseData.message || "Something went wrong",
+		});
+	};
 	const form = useForm({
 		resolver: zodResolver(newPackageFormSchema),
 		defaultValues: {
-			...packages[index],
+			...villages[index],
 		},
 	});
 
@@ -222,7 +250,7 @@ export default function VillageRowAction({ packages, setPackages, index }) {
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
-					<AlertDialogAction onClick={() => deletePackage()}>
+					<AlertDialogAction onClick={() => deleteVillage()}>
 						Delete
 					</AlertDialogAction>
 				</AlertDialogFooter>
