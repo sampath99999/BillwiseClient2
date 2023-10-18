@@ -164,11 +164,11 @@ export default function PackageRowAction({ packages, setPackages, index }) {
 								Edit
 							</DropdownMenuItem>
 						</DialogTrigger>
-						<DropdownMenuItem>
-							<AlertDialogTrigger className="w-full text-left">
+						<AlertDialogTrigger className="w-full text-left">
+							<DropdownMenuItem className="cursor-pointer">
 								Delete
-							</AlertDialogTrigger>
-						</DropdownMenuItem>
+							</DropdownMenuItem>
+						</AlertDialogTrigger>
 					</DropdownMenuContent>
 				</DropdownMenu>
 

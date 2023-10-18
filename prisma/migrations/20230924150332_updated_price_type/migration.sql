@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `package` MODIFY `price` DECIMAL(65, 30) NOT NULL;
+ALTER TABLE `Package` MODIFY `price` DECIMAL(65, 30) NOT NULL;
