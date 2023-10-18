@@ -82,6 +82,7 @@ export async function DELETE(req, res) {
 	}
 }
 
+// To Updated Only Changed Fields
 export async function PATCH(req) {
 	let { id, data } = await req.json();
 	try {
@@ -116,6 +117,7 @@ export async function PATCH(req) {
 	}
 }
 
+// To Updated Status bulk
 export async function PUT(req) {
 	let { ids, status } = await req.json();
 	try {

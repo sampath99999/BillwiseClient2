@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { NewVillageModal } from "./newVillage";
 
-export default function VillageFilters({ villages, setVillages }) {
+export default function VillageFilters({ villages, setVillages, table }) {
+	function searchHandler(event) {
+		let key = event.target?.value;
+		table.getColumn("name")?.setFilterValue(key);
+	}
+
 	return (
 		<>
 			<div
@@ -17,6 +22,7 @@ export default function VillageFilters({ villages, setVillages }) {
 						<Input
 							placeholder="Search for Village"
 							id={"searchVillage"}
+							onChange={searchHandler}
 						/>
 						<label
 							className={

@@ -43,7 +43,11 @@ export function VillageDataTable({ data }) {
 
 	return (
 		<>
-			<VillageFilters villages={villages} setVillages={SetVillages} />
+			<VillageFilters
+				villages={villages}
+				table={table}
+				setVillages={SetVillages}
+			/>
 
 			<div className="rounded-md border mt-3">
 				<Table>

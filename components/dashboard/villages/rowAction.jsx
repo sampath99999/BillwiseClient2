@@ -38,7 +38,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { newPackageFormSchema } from "@/utils/forms";
+import { newPackageFormSchema, newVillageFormSchema } from "@/utils/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Form,
@@ -95,13 +95,56 @@ export default function VillageRowAction({ villages, setVillages, index }) {
 		});
 	};
 	const form = useForm({
-		resolver: zodResolver(newPackageFormSchema),
+		resolver: zodResolver(newVillageFormSchema),
 		defaultValues: {
 			...villages[index],
 		},
 	});
 
-	async function handleEdit(values) {}
+	async function handleEdit(values) {
+		let fieldsEdited = Object.keys(form.formState.dirtyFields);
+		if (fieldsEdited.length === 0) {
+			setEditDialogOpen(false);
+			return false;
+		}
+
+		let editedVillage = {};
+		for (const key of fieldsEdited) {
+			if (values.hasOwnProperty(key)) {
+				editedVillage[key] = values[key];
+			}
+		}
+
+		let data = {
+			id: villages[index].id,
+			data: editedVillage,
+		};
+
+		setEditLoading(true);
+		let response = await fetch("/api/villages", {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		});
+
+		let responseData = await response.json();
+		if (response.ok && responseData) {
+			setEditDialogOpen(false);
+			setEditLoading(false);
+			villages[index] = responseData;
+			setVillages([...villages]);
+			toast({
+				description: "Village Updated Successfully!",
+			});
+			return true;
+		}
+		setEditLoading(false);
+		toast({
+			description: responseData.message || "Something went wrong",
+		});
+	}
 	return (
 		<AlertDialog>
 			<Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
@@ -130,9 +173,9 @@ export default function VillageRowAction({ villages, setVillages, index }) {
 
 				<DialogContent className="sm:max-w-[425px]">
 					<DialogHeader>
-						<DialogTitle>Edit Package</DialogTitle>
+						<DialogTitle>Edit Village</DialogTitle>
 						<DialogDescription>
-							Make changes to package here. Click save when you're
+							Make changes to Village here. Click save when you're
 							done.
 						</DialogDescription>
 					</DialogHeader>
@@ -149,7 +192,7 @@ export default function VillageRowAction({ villages, setVillages, index }) {
 										<FormLabel>Name</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Package Name..."
+												placeholder="Village Name..."
 												{...field}
 											/>
 										</FormControl>
@@ -159,63 +202,15 @@ export default function VillageRowAction({ villages, setVillages, index }) {
 							/>
 							<FormField
 								control={form.control}
-								name="price"
+								name="shortcode"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Price Per Month</FormLabel>
+										<FormLabel>Short Code</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Package Price..."
+												placeholder="Village Short Code..."
 												{...field}
-												type={"number"}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="type"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Type</FormLabel>
-										<FormControl>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select Type" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													<SelectItem value="CHANNEL">
-														Channel
-													</SelectItem>
-													<SelectItem value="PACKAGE">
-														Package
-													</SelectItem>
-												</SelectContent>
-											</Select>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="status"
-								render={({ field }) => (
-									<FormItem
-										className={"flex justify-between"}
-									>
-										<FormLabel>Status</FormLabel>
-										<FormControl>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
+												type={"text"}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -232,7 +227,7 @@ export default function VillageRowAction({ villages, setVillages, index }) {
 												: ""
 										}
 									/>
-									<span>Update</span>
+									<span>Save</span>
 								</Button>{" "}
 							</DialogFooter>
 						</form>

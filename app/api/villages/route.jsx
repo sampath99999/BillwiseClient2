@@ -6,6 +6,7 @@ import prisma from "@/lib/utils";
 import {
 	createVillage,
 	deleteVillages,
+	patchVillage,
 } from "@/controllers/village.controller";
 
 export async function POST(req) {
@@ -15,76 +16,17 @@ export async function POST(req) {
 
 export async function DELETE(req, res) {
 	let { ids } = await req.json();
-	return deleteVillages(ids);
+	return await deleteVillages(ids);
 }
 
+// To Updated Only Changed Fields
 export async function PATCH(req) {
 	let { id, data } = await req.json();
-	try {
-		if (data.price) data.price = parseInt(data.price);
-		let updatePackage = await prisma.package.update({
-			where: {
-				id: id,
-			},
-			data,
-		});
-		if (updatePackage) {
-			return NextResponse.json(updatePackage);
-		} else {
-			return NextResponse.json(
-				{
-					success: false,
-					message: "Something went wrong",
-				},
-				{ status: 500 }
-			);
-		}
-	} catch (e) {
-		console.log(e);
-		// TODO error handling
-		return NextResponse.json(
-			{
-				success: false,
-				message: "Something went wrong",
-			},
-			{ status: 500 }
-		);
-	}
+	return await patchVillage(id, data);
 }
 
+// To Updated Status bulk
 export async function PUT(req) {
 	let { ids, status } = await req.json();
-	try {
-		let updatePackages = await prisma.package.updateMany({
-			where: {
-				id: {
-					in: ids,
-				},
-			},
-			data: {
-				status,
-			},
-		});
-		if (updatePackages) {
-			return NextResponse.json(updatePackages);
-		} else {
-			return NextResponse.json(
-				{
-					success: false,
-					message: "Something went wrong",
-				},
-				{ status: 500 }
-			);
-		}
-	} catch (e) {
-		console.log(e);
-		// TODO error handling
-		return NextResponse.json(
-			{
-				success: false,
-				message: "Something went wrong",
-			},
-			{ status: 500 }
-		);
-	}
+	return await patchVillage(id, { status });
 }

@@ -73,3 +73,35 @@ export const deleteVillages = async function (ids) {
 		);
 	}
 };
+
+export const patchVillage = async function (id, data) {
+	try {
+		let updatePackage = await prisma.village.update({
+			where: {
+				id: id,
+			},
+			data,
+		});
+		if (updatePackage) {
+			return NextResponse.json(updatePackage);
+		} else {
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Something went wrong",
+				},
+				{ status: 500 }
+			);
+		}
+	} catch (e) {
+		console.log(e);
+		// TODO error handling
+		return NextResponse.json(
+			{
+				success: false,
+				message: "Something went wrong",
+			},
+			{ status: 500 }
+		);
+	}
+};
