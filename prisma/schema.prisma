@@ -27,8 +27,9 @@ model Network {
     address    String?
     status     Boolean   @default(false)
     users      User[]
-    packages   Package[]
-    Village    Village[]
+    Packages   Package[]
+    Villages   Village[]
+    Streets    Street[]
 }
 
 model Package {
@@ -53,6 +54,18 @@ model Village {
     shortcode  String
     network    Network  @relation(fields: [network_id], references: [id])
     network_id Int
+    Streets    Street[]
+}
+
+model Street {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    village    Village  @relation(fields: [village_id], references: [id])
+    village_id Int
+    network    Network  @relation(fields: [network_id], references: [id])
+    network_id Int
+    name       String
 }
 
 enum PackageType {
