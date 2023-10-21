@@ -54,6 +54,7 @@ function Login() {
 			token_expired: "Please Login Again!",
 			user_inactive: "User is inactive!",
 			network_inactive: "Network is inactive!",
+			user_not_found: "User Not Found!",
 		};
 		const error = params.get("error");
 		if (error) {

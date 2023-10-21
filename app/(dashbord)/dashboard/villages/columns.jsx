@@ -3,7 +3,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import SortButton from "@/components/dashboard/sort-button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import VillageRowAction from "@/components/dashboard/villages/rowAction";
-import { AiOutlineDelete } from "react-icons/ai";
 
 export const VillageColumns = (villages, setVillages) => {
 	return [
@@ -49,13 +48,6 @@ export const VillageColumns = (villages, setVillages) => {
 		},
 		{
 			id: "actions",
-			header: ({ table }) => {
-				return (
-					table.getIsAllPageRowsSelected() && (
-						<AiOutlineDelete className="text-red-500" />
-					)
-				);
-			},
 			cell: function ({ row }) {
 				return (
 					<VillageRowAction

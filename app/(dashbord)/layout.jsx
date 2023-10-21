@@ -19,6 +19,9 @@ const validateUser = async function () {
 			network: true,
 		},
 	});
+	if (!user) {
+		redirect("/login?error=user_not_found");
+	}
 	if (!user.status) {
 		redirect("/login?error=user_inactive");
 	}
