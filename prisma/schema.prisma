@@ -21,16 +21,17 @@ model User {
 }
 
 model Network {
-    id         Int       @id @default(autoincrement())
-    created_at DateTime  @default(now())
-    updated_at DateTime  @updatedAt
+    id         Int        @id @default(autoincrement())
+    created_at DateTime   @default(now())
+    updated_at DateTime   @updatedAt
     name       String
     address    String?
-    status     Boolean   @default(false)
+    status     Boolean    @default(false)
     users      User[]
     Packages   Package[]
     Villages   Village[]
     Streets    Street[]
+    Customer   Customer[]
 }
 
 model Package {
@@ -48,25 +49,47 @@ model Package {
 }
 
 model Village {
-    id         Int      @id @default(autoincrement())
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    id         Int        @id @default(autoincrement())
+    created_at DateTime   @default(now())
+    updated_at DateTime   @updatedAt
     name       String
     shortcode  String
-    network    Network  @relation(fields: [network_id], references: [id])
+    network    Network    @relation(fields: [network_id], references: [id])
     network_id Int
     Streets    Street[]
+    Customer   Customer[]
 }
 
 model Street {
-    id         Int      @id @default(autoincrement())
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    village    Village  @relation(fields: [village_id], references: [id])
+    id         Int        @id @default(autoincrement())
+    created_at DateTime   @default(now())
+    updated_at DateTime   @updatedAt
+    village    Village    @relation(fields: [village_id], references: [id])
     village_id Int
-    network    Network  @relation(fields: [network_id], references: [id])
+    network    Network    @relation(fields: [network_id], references: [id])
     network_id Int
     name       String
+    Customer   Customer[]
+}
+
+model Customer {
+    id          Int      @id @default(autoincrement())
+    first_name  String
+    last_name   String
+    father_name String?
+    mother_name String?
+    phone_no    String
+    street      Street   @relation(fields: [street_id], references: [id])
+    street_id   Int
+    village     Village  @relation(fields: [village_id], references: [id])
+    village_id  Int
+    network     Network  @relation(fields: [network_id], references: [id])
+    network_id  Int
+    box_no      String
+    mso_id      String?
+    note        String
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
 }
 
 enum PackageType {
