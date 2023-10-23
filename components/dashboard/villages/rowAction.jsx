@@ -2,19 +2,12 @@
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import {
-	DotsHorizontalIcon,
-	DotsVerticalIcon,
-	ReloadIcon,
-} from "@radix-ui/react-icons";
+import { DotsHorizontalIcon, ReloadIcon } from "@radix-ui/react-icons";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -36,29 +29,18 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { newPackageFormSchema, newVillageFormSchema } from "@/utils/forms";
+import { newVillageFormSchema } from "@/utils/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 
 export default function VillageRowAction({ villages, setVillages, index }) {
 	let { toast } = useToast();
@@ -69,6 +51,13 @@ export default function VillageRowAction({ villages, setVillages, index }) {
 		let tempVillages = villages;
 		tempVillages[index].loading = true;
 		setVillages([...tempVillages]);
+		if (parseInt(villages[index]._count.Streets) > 0) {
+			toast({
+				description:
+					"Village cannot be removed, Please remove streets first.",
+			});
+			return;
+		}
 		let response = await fetch("/api/villages", {
 			method: "DELETE",
 			headers: {
