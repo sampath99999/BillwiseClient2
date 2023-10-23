@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { VillageColumns } from "./columns";
+import { StreetColumns, VillageColumns } from "./columns";
 import { useToast } from "@/components/ui/use-toast";
 import {
 	getCoreRowModel,
@@ -18,17 +18,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import VillageFilters from "@/components/dashboard/villages/filter";
+import StreetFilters from "@/components/dashboard/streets/filter";
 
-export function VillageDataTable({ data }) {
-	const [villages, SetVillages] = useState([...data]);
+export function StreetDataTable({ data, village_id }) {
+	const [streets, setStreets] = useState([...data]);
 	const [sorting, setSorting] = useState([]);
 	const [columnFilters, setColumnFilters] = useState([]);
-	const columns = VillageColumns(villages, SetVillages);
+	const columns = StreetColumns(streets, setStreets);
 	let { toast } = useToast();
 
 	const table = useReactTable({
-		data: villages,
+		data: streets,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		onSortingChange: setSorting,
@@ -43,10 +43,11 @@ export function VillageDataTable({ data }) {
 
 	return (
 		<>
-			<VillageFilters
-				villages={villages}
+			<StreetFilters
+				streets={streets}
 				table={table}
-				setVillages={SetVillages}
+				setStreets={setStreets}
+				village_id={village_id}
 			/>
 			<div className="rounded-md border mt-3">
 				<Table>

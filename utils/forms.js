@@ -31,3 +31,12 @@ export const newVillageFormSchema = z.object({
 		})
 		.length(3, "Shortcode must be 3 character's long"),
 });
+
+export const newStreetFormSchema = z.object({
+	name: z
+		.string({
+			required_error: "Street Name is Required",
+		})
+		.min(3, "Street Name should be at least 3 character's long")
+		.max(30, "Street Name should be at most 30 character's long"),
+});

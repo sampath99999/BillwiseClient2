@@ -2,10 +2,15 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { NewVillageModal } from "./newVillage";
+import { NewStreetModal, NewVillageModal } from "./newStreet";
 import { AiOutlineDelete } from "react-icons/ai";
 
-export default function VillageFilters({ villages, setVillages, table }) {
+export default function StreetFilters({
+	streets,
+	setStreets,
+	table,
+	village_id,
+}) {
 	function searchHandler(event) {
 		let key = event.target?.value;
 		table.getColumn("name")?.setFilterValue(key);
@@ -21,15 +26,15 @@ export default function VillageFilters({ villages, setVillages, table }) {
 				<div className={"left flex items-center gap-3"}>
 					<div className={"relative items-center flex"}>
 						<Input
-							placeholder="Search for Village"
-							id={"searchVillage"}
+							placeholder="Search for Street"
+							id={"searchStreet"}
 							onChange={searchHandler}
 						/>
 						<label
 							className={
 								"absolute right-[10px] border px-2 rounded-md"
 							}
-							htmlFor={"searchVillage"}
+							htmlFor={"searchStreet"}
 							style={{ userSelect: "none" }}
 						>
 							↵
@@ -37,9 +42,10 @@ export default function VillageFilters({ villages, setVillages, table }) {
 					</div>
 				</div>
 				<div className={"right flex items-center gap-3"}>
-					<NewVillageModal
-						villages={villages}
-						setVillages={setVillages}
+					<NewStreetModal
+						streets={streets}
+						setStreets={setStreets}
+						village_id={village_id}
 					/>
 				</div>
 			</div>

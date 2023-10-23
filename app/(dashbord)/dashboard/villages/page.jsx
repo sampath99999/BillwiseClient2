@@ -10,7 +10,16 @@ export default async function Villages() {
 		},
 	];
 
-	const villages = await prisma.village.findMany();
+	const villages = await prisma.village.findMany({
+		include: {
+			_count: {
+				select: {
+					Streets: true,
+				},
+			},
+		},
+	});
+
 	return (
 		<>
 			<Breadcrumb links={breadcrumbLinks} current="Villages" />

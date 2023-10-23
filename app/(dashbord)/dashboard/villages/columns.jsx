@@ -3,31 +3,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import SortButton from "@/components/dashboard/sort-button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import VillageRowAction from "@/components/dashboard/villages/rowAction";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
+import Link from "next/link";
 
 export const VillageColumns = (villages, setVillages) => {
 	return [
-		{
-			accessorKey: "index",
-			header: ({ table }) => (
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected()}
-					onCheckedChange={(value) =>
-						table.toggleAllPageRowsSelected(!!value)
-					}
-					aria-label="Select all"
-				/>
-			),
-			cell: ({ row }) =>
-				row?.original?.loading ? (
-					<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-				) : (
-					<Checkbox
-						checked={row.getIsSelected()}
-						onCheckedChange={(value) => row.toggleSelected(!!value)}
-						aria-label="Select row"
-					/>
-				),
-		},
 		{
 			accessorKey: "name",
 			header: ({ column }) => {
@@ -43,7 +29,28 @@ export const VillageColumns = (villages, setVillages) => {
 		{
 			accessorKey: "streets",
 			header: ({ column }) => {
-				return <SortButton name={"Streets"} column={column} />;
+				return (
+					<>
+						<SortButton name={"Streets"} column={column} />
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger>
+									<AiOutlineQuestionCircle />
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>Click on Count to see Streets</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+					</>
+				);
+			},
+			cell: ({ row }) => {
+				return (
+					<Link href={"./villages/" + row.original?.id + "/streets"}>
+						{row.original?._count?.Streets}
+					</Link>
+				);
 			},
 		},
 		{
