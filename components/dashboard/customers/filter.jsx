@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { PlusIcon } from "@radix-ui/react-icons";
 import CustomerAction from "@/components/dashboard/customers/action";
 import CustomerFilterPopover from "@/components/dashboard/customers/filterPopover";
-import { NewStreetModal } from "./newCustomer";
 
 export default function CustomerFilter({ table, filters }) {
 	function addFilter(name, value) {
@@ -44,7 +43,10 @@ export default function CustomerFilter({ table, filters }) {
 						↵
 					</label>
 				</div>
-				<NewStreetModal></NewStreetModal>
+				<Button variant={"secondary"} size={"sm"}>
+					<PlusIcon />
+					<span className="hidden md:inline">New Customer</span>
+				</Button>{" "}
 			</div>
 		</div>
 	);
