@@ -37,7 +37,7 @@ export const CustomerColumns = [
 		cell: ({ row }) => {
 			return (
 				<Link href={"/dashboard/customers/" + row.original?.id}>
-					{row.original?.name}
+					{row.original?.first_name + " " + row.original?.last_name}
 				</Link>
 			);
 		},
@@ -59,12 +59,14 @@ export const CustomerColumns = [
 		header: ({ column }) => {
 			return <SortButton name={"Street"} column={column} />;
 		},
+		cell: ({ row }) => row.original?.street?.name,
 	},
 	{
 		accessorKey: "village",
 		header: ({ column }) => {
 			return <SortButton name={"Village"} column={column} />;
 		},
+		cell: ({ row }) => row.original?.village?.name,
 	},
 	{
 		accessorKey: "status",
@@ -101,6 +103,8 @@ export const CustomerColumns = [
 	},
 	{
 		header: "Actions",
-		cell: function ({ row }) {},
+		cell: function ({ row }) {
+			return <></>;
+		},
 	},
 ];

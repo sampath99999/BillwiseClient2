@@ -2,6 +2,19 @@ import { AuthOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+export const getVillages = async () => {
+	let session = await getServerSession();
+	let villages = await prisma.village.findMany({
+		where: {
+			network_id: await session.user.network_id,
+		},
+	});
+	return NextResponse.json({
+		success: true,
+		data: villages,
+	});
+};
+
 export const createVillage = async function (name, shortcode) {
 	try {
 		let session = await getServerSession(AuthOptions);

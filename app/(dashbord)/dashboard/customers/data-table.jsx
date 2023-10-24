@@ -18,13 +18,14 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import CustomerFilter from "@/components/dashboard/customers/filter";
+import { CustomerColumns } from "./columns";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ data }) {
 	const [sorting, setSorting] = useState([]);
 	const [columnFilters, setColumnFilters] = useState([]);
 	const table = useReactTable({
 		data,
-		columns,
+		columns: CustomerColumns,
 		getCoreRowModel: getCoreRowModel(),
 		onSortingChange: setSorting,
 		getSortedRowModel: getSortedRowModel(),
@@ -35,7 +36,6 @@ export function DataTable({ columns, data }) {
 			columnFilters,
 		},
 	});
-	console.log(columnFilters);
 
 	return (
 		<>
@@ -57,7 +57,7 @@ export function DataTable({ columns, data }) {
 												: flexRender(
 														header.column.columnDef
 															.header,
-														header.getContext(),
+														header.getContext()
 												  )}
 										</TableHead>
 									);
@@ -81,7 +81,7 @@ export function DataTable({ columns, data }) {
 										>
 											{flexRender(
 												cell.column.columnDef.cell,
-												cell.getContext(),
+												cell.getContext()
 											)}
 										</TableCell>
 									))}
@@ -90,7 +90,7 @@ export function DataTable({ columns, data }) {
 						) : (
 							<TableRow>
 								<TableCell
-									colSpan={columns.length}
+									colSpan={CustomerColumns.length}
 									className="h-24 text-center"
 								>
 									No results.

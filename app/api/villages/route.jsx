@@ -1,13 +1,15 @@
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { AuthOptions } from "../auth/[...nextauth]/route";
-import prisma from "@/lib/utils";
 import {
 	createVillage,
 	deleteVillages,
+	getVillages,
 	patchVillage,
 } from "@/controllers/village.controller";
+import prisma from "@/lib/utils";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+	return await getVillages();
+}
 
 export async function POST(req) {
 	let { name, shortcode } = await req.json();

@@ -87,7 +87,7 @@ model Customer {
     network_id  Int
     box_no      String
     mso_id      String?
-    note        String
+    note        String?
     created_at  DateTime @default(now())
     updated_at  DateTime @updatedAt
 }

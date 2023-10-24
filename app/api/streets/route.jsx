@@ -3,6 +3,7 @@ import {
 	deleteStreet,
 	patchStreet,
 } from "@/controllers/street.controller";
+import prisma from "@/lib/utils";
 
 export async function POST(req) {
 	let { name, village_id } = await req.json();
